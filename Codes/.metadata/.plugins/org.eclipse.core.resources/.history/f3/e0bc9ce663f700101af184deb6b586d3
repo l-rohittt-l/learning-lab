@@ -1,0 +1,40 @@
+package rohit_sawant.day8;
+
+class BankAccount {
+	String name = "User 1";
+	double balance = 10000;
+}
+
+class BankTransactions {
+	synchronized void ATMWithdrawal(double amount) {
+		balance = balance - amount;
+		System.out.println("ATM Money Withdrawn");
+	}
+	synchronized void OnlinePaymentWithdrawal(double amount) {
+		System.out.println("Money withdrawn by UPI or Online Banking");
+	}
+}
+
+public class BankUser extends Thread{
+	public static void main(String[] args) {
+		BankTransactions withdraw = new BankTransactions();
+		
+//		Scenario 1: ATM Withdrawal and Mobile Banking at the same time
+		Thread payment1 = new Thread ( 
+			() -> {
+				System.out.println("User started ATM money withdrawal");
+				withdraw.ATMWithdrawal(5000);
+			}
+		);
+		
+		Thread payment2 = new Thread ( 
+			() -> {
+				System.out.println("User started Online Banking Payment");
+				withdraw.OnlinePaymentWithdrawal(5000);
+			}
+		);
+		
+		payment1.start();
+		payment2.start();
+	}
+}

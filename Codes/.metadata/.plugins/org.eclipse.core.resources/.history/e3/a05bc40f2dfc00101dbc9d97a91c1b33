@@ -1,0 +1,74 @@
+package rohit_sawant.day11.useCase1;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class HospitalSystem {
+
+    // HashMap to store patients using Patient ID as key
+    private Map<Integer, Patient> patientMap = new HashMap<>();
+
+    // add a patient
+    public void addPatient(Patient patient) {
+        patientMap.put(patient.getPatientId(), patient);
+        System.out.println("Patient added successfully");
+    }
+
+    // update patient details
+    public void updatePatient(int patientId, String name, int age, String disease) {
+        if (patientMap.containsKey(patientId)) {
+            Patient patient = patientMap.get(patientId);
+            patient.setName(name);
+            patient.setAge(age);
+            patient.setDisease(disease);
+            System.out.println("Patient updated successfully");
+        } else {
+            System.out.println("Patient not found");
+        }
+    }
+
+    // retrieve patient details
+    public void getPatient(int patientId) {
+        if (patientMap.containsKey(patientId)) {
+            System.out.println(patientMap.get(patientId));
+        } else {
+            System.out.println("Patient not found");
+        }
+    }
+
+    // remove a patient
+    public void removePatient(int patientId) {
+        if (patientMap.remove(patientId) != null) {
+            System.out.println("Patient removed successfully");
+        } else {
+            System.out.println("Patient not found");
+        }
+    }
+
+    // list all patients
+    public void listAllPatients() {
+        if (patientMap.isEmpty()) {
+            System.out.println("No patients in the system");
+        } else {
+            for (Patient patient : patientMap.values()) {
+                System.out.println(patient);
+            }
+        }
+    }
+
+    // check if patient exists
+    public boolean patientExists(int patientId) {
+        return patientMap.containsKey(patientId);
+    }
+
+    // count total patients
+    public int countPatients() {
+        return patientMap.size();
+    }
+
+    // clear the system
+    public void clearSystem() {
+        patientMap.clear();
+        System.out.println("All patient records cleared");
+    }
+}

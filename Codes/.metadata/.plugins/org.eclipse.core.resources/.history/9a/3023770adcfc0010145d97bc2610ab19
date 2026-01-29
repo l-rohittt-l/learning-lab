@@ -1,0 +1,154 @@
+package rohit_sawant.day11.useCase1;
+java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class HospitalSystem2 {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        Map<Integer, String> patients = new HashMap<>();
+
+        while (true) {
+
+            printMenu();
+            int choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    addPatient(sc, patients);
+                    break;
+
+                case 2:
+                    updatePatient(sc, patients);
+                    break;
+
+                case 3:
+                    getPatient(sc, patients);
+                    break;
+
+                case 4:
+                    removePatient(sc, patients);
+                    break;
+
+                case 5:
+                    listPatients(patients);
+                    break;
+
+                case 6:
+                    checkPatient(sc, patients);
+                    break;
+
+                case 7:
+                    countPatients(patients);
+                    break;
+
+                case 8:
+                    clearSystem(patients);
+                    break;
+
+                case 9:
+                    System.out.println("Exiting system...");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice");
+            }
+        }
+    }
+
+    // ---------------- HELPER METHODS ----------------
+
+    private static void printMenu() {
+        System.out.println("\n--- Hospital Patient Records System ---");
+        System.out.println("1. Add patient");
+        System.out.println("2. Update patient");
+        System.out.println("3. Get patient details");
+        System.out.println("4. Remove patient");
+        System.out.println("5. List all patients");
+        System.out.println("6. Check patient existence");
+        System.out.println("7. Count total patients");
+        System.out.println("8. Clear system");
+        System.out.println("9. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    private static void addPatient(Scanner sc, Map<Integer, String> patients) {
+        System.out.print("Enter Patient ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Enter Patient Details: ");
+        String details = sc.nextLine();
+
+        patients.put(id, details);
+        System.out.println("Patient added successfully");
+    }
+
+    private static void updatePatient(Scanner sc, Map<Integer, String> patients) {
+        System.out.print("Enter Patient ID to update: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        if (patients.containsKey(id)) {
+            System.out.print("Enter new Patient Details: ");
+            String details = sc.nextLine();
+            patients.put(id, details);
+            System.out.println("Patient updated successfully");
+        } else {
+            System.out.println("Patient not found");
+        }
+    }
+
+    private static void getPatient(Scanner sc, Map<Integer, String> patients) {
+        System.out.print("Enter Patient ID to retrieve: ");
+        int id = sc.nextInt();
+
+        if (patients.containsKey(id)) {
+            System.out.println("Patient Details: " + patients.get(id));
+        } else {
+            System.out.println("Patient not found");
+        }
+    }
+
+    private static void removePatient(Scanner sc, Map<Integer, String> patients) {
+        System.out.print("Enter Patient ID to remove: ");
+        int id = sc.nextInt();
+
+        if (patients.remove(id) != null) {
+            System.out.println("Patient removed successfully");
+        } else {
+            System.out.println("Patient not found");
+        }
+    }
+
+    private static void listPatients(Map<Integer, String> patients) {
+        if (patients.isEmpty()) {
+            System.out.println("No patients available");
+        } else {
+            for (Map.Entry<Integer, String> entry : patients.entrySet()) {
+                System.out.println("ID: " + entry.getKey() +
+                                   ", Details: " + entry.getValue());
+            }
+        }
+    }
+
+    private static void checkPatient(Scanner sc, Map<Integer, String> patients) {
+        System.out.print("Enter Patient ID to check: ");
+        int id = sc.nextInt();
+        System.out.println("Exists: " + patients.containsKey(id));
+    }
+
+    private static void countPatients(Map<Integer, String> patients) {
+        System.out.println("Total patients: " + patients.size());
+    }
+
+    private static void clearSystem(Map<Integer, String> patients) {
+        patients.clear();
+        System.out.println("System cleared");
+    }
+}

@@ -1,0 +1,254 @@
+package rohit_sawant.day11.useCase1;	
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class HospitalSystem {
+
+    public static void main(String[] args) {
+
+        /*
+         * We need a way to take input from the user (keyboard).
+         * Scanner helps us read numbers and strings entered by the user.
+         * This scanner will be used throughout the program.
+         */
+        Scanner sc = new Scanner(System.in);
+
+        /*
+         * We need some place to STORE patient records.
+         *
+         * Patient ID must be UNIQUE → perfect for a Map key.
+         * Patient details can be stored as a String for now
+         * (to keep things simple and linear).
+         *
+         * Key   = Integer (Patient ID)
+         * Value = String  (Patient details)
+         */
+        Map<Integer, String> patients = new HashMap<>();
+
+        /*
+         * We want the program to keep running again and again
+         * until the user chooses to exit.
+         *
+         * while(true) means:
+         * - show menu
+         * - take input
+         * - perform operation
+         * - repeat
+         */
+        while (true) {
+
+            // Displaying menu options to the user
+            System.out.println("\n--- Hospital Patient Records System ---");
+            System.out.println("1. Add patient");
+            System.out.println("2. Update patient");
+            System.out.println("3. Get patient details");
+            System.out.println("4. Remove patient");
+            System.out.println("5. List all patients");
+            System.out.println("6. Check patient existence");
+            System.out.println("7. Count total patients");
+            System.out.println("8. Clear system");
+            System.out.println("9. Exit");
+
+            // Asking user to choose an option
+            System.out.print("Enter your choice: ");
+
+            /*
+             * Reading user choice.
+             * Example:
+             * If user enters 1 → add patient
+             * If user enters 5 → list all patients
+             */
+            int choice = sc.nextInt();
+
+            /*
+             * switch is used because we have multiple fixed options.
+             * Based on the value of 'choice', the matching case will run.
+             */
+            switch (choice) {
+
+                case 1:
+                    /*
+                     * CASE 1 → ADD PATIENT
+                     */
+
+                    System.out.print("Enter Patient ID: ");
+                    int addId = sc.nextInt();
+
+                    /*
+                     * After reading an int, Scanner leaves a newline in buffer.
+                     * sc.nextLine() clears that leftover newline.
+                     * If we don't do this, nextLine() may skip input.
+                     */
+                    sc.nextLine();
+
+                    System.out.print("Enter Patient Details: ");
+                    String details = sc.nextLine();
+
+                    /*
+                     * Storing patient in HashMap.
+                     * If ID already exists, old value will be replaced.
+                     */
+                    patients.put(addId, details);
+
+                    System.out.println("Patient added successfully");
+                    break;
+
+                case 2:
+                    /*
+                     * CASE 2 → UPDATE PATIENT
+                     */
+
+                    System.out.print("Enter Patient ID to update: ");
+                    int updateId = sc.nextInt();
+                    sc.nextLine();
+
+                    /*
+                     * First check if patient exists.
+                     * We should NOT update something that doesn't exist.
+                     */
+                    if (patients.containsKey(updateId)) {
+
+                        System.out.print("Enter new Patient Details: ");
+                        String newDetails = sc.nextLine();
+
+                        /*
+                         * Updating patient details.
+                         * Same key, new value.
+                         */
+                        patients.put(updateId, newDetails);
+
+                        System.out.println("Patient updated successfully");
+                    } else {
+                        System.out.println("Patient not found");
+                    }
+                    break;
+
+                case 3:
+                    /*
+                     * CASE 3 → RETRIEVE PATIENT DETAILS
+                     */
+
+                    System.out.print("Enter Patient ID to retrieve: ");
+                    int getId = sc.nextInt();
+
+                    /*
+                     * Check if patient exists before accessing.
+                     */
+                    if (patients.containsKey(getId)) {
+                        System.out.println("Patient Details: " + patients.get(getId));
+                    } else {
+                        System.out.println("Patient not found");
+                    }
+                    break;
+
+                case 4:
+                    /*
+                     * CASE 4 → REMOVE PATIENT
+                     */
+
+                    System.out.print("Enter Patient ID to remove: ");
+                    int removeId = sc.nextInt();
+
+                    /*
+                     * remove() returns the value if key existed,
+                     * otherwise returns null.
+                     */
+                    if (patients.remove(removeId) != null) {
+                        System.out.println("Patient removed successfully");
+                    } else {
+                        System.out.println("Patient not found");
+                    }
+                    break;
+
+                case 5:
+                    /*
+                     * CASE 5 → LIST ALL PATIENTS
+                     */
+
+                    /*
+                     * If map is empty, nothing to display.
+                     */
+                    if (patients.isEmpty()) {
+                        System.out.println("No patients available");
+                    } else {
+                        System.out.println("All Patients:");
+
+                        /*
+                         * Loop through all entries in the HashMap.
+                         * entry.getKey()   → Patient ID
+                         * entry.getValue() → Patient Details
+                         */
+                        for (Map.Entry<Integer, String> entry : patients.entrySet()) {
+                            System.out.println(
+                                "ID: " + entry.getKey() +
+                                ", Details: " + entry.getValue()
+                            );
+                        }
+                    }
+                    break;
+
+                case 6:
+                    /*
+                     * CASE 6 → CHECK IF PATIENT EXISTS
+                     */
+
+                    System.out.print("Enter Patient ID to check: ");
+                    int checkId = sc.nextInt();
+
+                    /*
+                     * containsKey() returns true or false.
+                     */
+                    System.out.println("Exists: " + patients.containsKey(checkId));
+                    break;
+
+                case 7:
+                    /*
+                     * CASE 7 → COUNT TOTAL PATIENTS
+                     */
+
+                    /*
+                     * size() returns number of key-value pairs in map.
+                     */
+                    System.out.println("Total patients: " + patients.size());
+                    break;
+
+                case 8:
+                    /*
+                     * CASE 8 → CLEAR SYSTEM
+                     */
+
+                    /*
+                     * clear() removes all entries from the map.
+                     */
+                    patients.clear();
+                    System.out.println("System cleared");
+                    break;
+
+                case 9:
+                    /*
+                     * CASE 9 → EXIT PROGRAM
+                     */
+
+                    System.out.println("Exiting system...");
+
+                    /*
+                     * Closing scanner to release resource.
+                     */
+                    sc.close();
+
+                    /*
+                     * return exits the main() method,
+                     * which stops the program completely.
+                     */
+                    return;
+
+                default:
+                    /*
+                     * If user enters any number other than 1–9
+                     */
+                    System.out.println("Invalid choice");
+            }
+        }
+    }
+}

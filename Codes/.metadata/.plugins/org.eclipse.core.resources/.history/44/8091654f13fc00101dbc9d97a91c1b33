@@ -1,0 +1,22 @@
+package rohit_sawant.day11;
+
+import java.util.*;
+import java.util.Map;
+ 
+public class MapExample {
+	public static void main(String[] args)
+	{
+		Map<Integer, String>Employee = new HashMap<>();
+		//HashMap<Integer, String>Employee1= new HashMap<>();
+		 
+		Employee.put(101, " Vinay ");
+		Employee.put(102, " Sonali ");
+		Employee.put(103, " Renu ");
+		
+		System.out.println(Employee);
+	 
+	}
+	 
+}
+ 
+ 

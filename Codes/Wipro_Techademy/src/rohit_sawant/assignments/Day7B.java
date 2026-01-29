@@ -1,0 +1,102 @@
+package rohit_sawant.assignments;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Condition;
+import java.util.Scanner;
+
+public class Day7B {
+
+    // write your logic here
+    private int n;
+    private int current = 1;
+    private volatile int threadTurn = 0;
+    private final Lock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
+
+    public Day7B(Integer n) {
+
+        // null check
+        if (n == null) {
+            System.out.println("Invalid input");
+            throw new IllegalArgumentException("Input cannot be null");
+        }
+
+        // lower bound check
+        if (n <= 0) {
+            System.out.println("Invalid input");
+            throw new IllegalArgumentException("n must be positive");
+        }
+
+        // upper bound handling for performance
+        if (n > 1_000_000) {
+            System.out.println("Input too large, limiting to 1,000,000");
+            n = 1_000_000;
+        }
+
+        this.n = n;
+
+        final Runnable task = () -> {
+
+            final int myTurn;
+            lock.lock();
+            try {
+                myTurn = threadTurn++;
+            } finally {
+                lock.unlock();
+            }
+
+            while (current <= this.n) {
+                lock.lock();
+                try {
+                    while (current <= this.n && (current - 1) % 3 != myTurn) {
+                        try {
+                            condition.await();
+                        } catch (InterruptedException e) {
+                            System.err.println("Thread interrupted while waiting");
+                            Thread.currentThread().interrupt();
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    if (current > this.n) {
+                        break;
+                    }
+
+                    System.out.print(current + " ");
+                    current++;
+                    condition.signalAll();
+
+                } finally {
+                    lock.unlock();
+                }
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        Thread t3 = new Thread(task);
+
+        t1.start();
+        t2.start();
+        t3.start();
+
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+        } catch (InterruptedException e) {
+            System.err.println("Thread join interrupted");
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Non editable starts here
+    public static void main(String[] args) throws InterruptedException {
+        try (Scanner scanner = new Scanner(System.in)) {
+            int n = scanner.nextInt();
+            Day7B obj = new Day7B(n);
+        }
+    }
+    // Non editable ends here
+}

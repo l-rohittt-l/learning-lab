@@ -1,0 +1,118 @@
+package rohit_sawant.assignments;
+
+//Import Scanner class to take input from the user
+import java.util.Scanner;
+
+/*
+* Custom Exception Class
+* This exception is thrown when the password does not meet
+* any of the required validation rules.
+*/
+class InvalidPasswordException extends Exception {
+
+ // Constructor that accepts an error message
+ // super(message) sends the message to the Exception class
+ public InvalidPasswordException(String message) {
+     super(message);
+ }
+}
+
+/*
+* Main class that contains password validation logic
+*/
+public class PasswordValidator {
+
+ /*
+  * This method checks whether the password follows all rules.
+  * If any rule fails, it throws InvalidPasswordException
+  */
+ private static void validatePassword(String password) throws InvalidPasswordException {
+
+     // Rule 1: Password must be at least 8 characters long
+     if (password.length() < 8) {
+         throw new InvalidPasswordException(
+             "Password must be at least 8 characters long."
+         );
+     }
+
+     // Flags to track required character types
+     boolean hasUpper = false;     // checks uppercase letters (A-Z)
+     boolean hasLower = false;     // checks lowercase letters (a-z)
+     boolean hasDigit = false;     // checks digits (0-9)
+     boolean hasSpecial = false;   // checks special characters
+
+     // Convert password into character array and loop through each character
+     //Abcd@123
+     for (char ch : password.toCharArray()) { // ch = A b c d @
+
+         // If character is uppercase letter
+         if (Character.isUpperCase(ch)) { // if(true)
+             hasUpper = true;
+
+         // If character is lowercase letter
+         } else if (Character.isLowerCase(ch)) {
+             hasLower = true;
+
+         // If character is a digit
+         } else if (Character.isDigit(ch)) {
+             hasDigit = true;
+
+         // If character is not letter or digit, it is special character
+         } else {
+             hasSpecial = true;
+         }
+     } // true - A
+
+     // Rule 2: Must contain at least one uppercase letter
+     if (!hasUpper) { //if(!true) = if(false)
+         throw new InvalidPasswordException(
+             "Password must contain at least one uppercase letter."
+         );
+     }
+
+     // Rule 3: Must contain at least one lowercase letter
+     if (!hasLower) {
+         throw new InvalidPasswordException(
+             "Password must contain at least one lowercase letter."
+         );
+     }
+
+     // Rule 4: Must contain at least one digit
+     if (!hasDigit) {
+         throw new InvalidPasswordException(
+             "Password must contain at least one digit (0-9)."
+         );
+     }
+
+     // Rule 5: Must contain at least one special character
+     if (!hasSpecial) {
+         throw new InvalidPasswordException(
+             "Password must contain at least one special character (@, #, $, %, etc.)."
+         );
+     }
+ }
+
+ // ================= NON-EDITABLE PART =================
+ public static void main(String[] args) {
+
+     // Scanner object to read input from keyboard
+     Scanner scanner = new Scanner(System.in);
+
+     // Read password entered by user
+     String password = scanner.nextLine();
+
+     try {
+         // Call password validation method
+         validatePassword(password);
+
+         // If no exception occurs, password is valid
+         System.out.println("Password is valid.");
+
+     } catch (InvalidPasswordException e) {
+
+         // If exception occurs, print error message
+         System.out.println("Invalid Password: " + e.getMessage());
+     }
+ }
+ // ================= NON-EDITABLE PART =================
+}
